@@ -29,7 +29,6 @@ int contador = 0;
 
 void MezclaOrd(int izquierda, int derecha)
 {
-
 	int m;
 
 	if(izquierda < derecha)

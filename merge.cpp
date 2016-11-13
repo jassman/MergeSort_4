@@ -1,108 +1,103 @@
-/*
- * Practica 4.
- *
- * @file merge.cpp
- * @brief Practicas Estructuras de Datos y Algoritmos Practica 4
- * Curso 2016 - 2017
- *
- * (c) Departament d'Informatica.
- *     Universitat de Valencia
- *
- * @version 1.0
- * @author Javier Alonso y Lucas Nicolini
- * @date 11-11-2016
- *
- */
-
-#include <iostream>
-#include "VElement.h"
+#include<vector>
+#include<iostream>
+#include <fstream>
+#include"VElement.h"
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 using namespace std;
 
-void Mezcla(int,int,int);
-void MezclaOrd(int,int);
+void MezclaOrd (vector<VElement>& , vector<VElement>&, int , int );
+void Mezclar(vector<VElement> &, vector<VElement> &, int , int , int);
+    
+int main ()
+{
+	srand(time(NULL));
+	int n = 10;
+	vector <VElement> v_orig; 
+	vector <VElement> v_aux;
+	int i;
 
-int vector[] = {5,8,4,99,1,45,78,6,7,2,33,48,13};
-int vector_aux[sizeof(vector)/2]; // vector auxiliar
+	for (i = 0; i < n; i++)
+	{
+		v_orig.push_back(1 + rand()%200);
+    		cout << v_orig.at(i).get() << " ";
+	}
 
-int contador = 0;
+	MezclaOrd (v_orig, v_aux, 0, n-1);
+	cout << endl;
+	for (i = 0; i < n; i++)
+	{
+	    	cout << v_orig.at(i).get() << " ";
+	}
+	cout << endl;
 
-void MezclaOrd(int izquierda, int derecha)
+	return 0;
+}
+
+void MezclaOrd (vector<VElement>& v_orig, vector<VElement>& v_aux, int i, int j)
 {
 	int m;
-
-	if(izquierda < derecha)
+	if(i < j)
 	{
-		m = (izquierda + derecha) / 2;
-		MezclaOrd(izquierda, m);
-		MezclaOrd(m+1, derecha);
-		Mezcla(izquierda, m, derecha);
+		m = (i + j) / 2;
+		MezclaOrd(v_orig, v_aux, i, m);
+		MezclaOrd(v_orig, v_aux, m+1, j);
+		Mezclar(v_orig, v_aux, i, m, j);
+
 	}
 }
 
-void Mezcla(int izquierda, int m, int derecha)
-
+void Mezclar(vector<VElement> &v_orig, vector<VElement> &v_aux, int izquierda, int m, int derecha)
 {
+	int i;
+	int j;
+	int k;
+	int aux;
 
-	int h,i,j,k;
-	h = izquierda; // Puntero que recorre el 1º subvector
-	i = izquierda; // Puntero que recorre el vector auxiliar
-	j = m + 1;	// Puntero que recorre el 2º subvector
-	vector_aux[derecha]; // vector auxiliar
+	i=izquierda;
+	j=m+1;
+	k=izquierda;
 
-	while((h <= m)&& (j <= derecha))
+	v_aux=v_orig;
+
+	while((i <= m) && (j <= derecha))
 	{
-		if(vector[h] <= vector[j])
+		if(v_orig.at(i)<=v_orig.at(j))
 		{
-			vector_aux[i] = vector[h];
-			h++;
+			v_aux.at(k)=v_orig.at(i);
+			i++;
 		}
 		else
 		{
-			vector_aux[i] = vector[j];
+			v_aux.at(k)=v_orig.at(j);
 			j++;
 		}
-	
-		i++;
+		k++;
 	}
-	
-	contador++;
-	
-	//Si algún subv termina copiamos el otro subv directamente.
-	if(h > m)
-	{
-		for(k = j; k <= derecha; k++)
+	if(i > m)
+	{       
+		while(j <= derecha)
 		{
-			vector_aux[i] = vector[k];
-			i++;
+			v_aux.at(k)=v_orig.at(j);
+			k++;
+			j++;
 		}
 	}
-	else 
+
+	else
 	{
-		for(k = h; k <= m; k++)
+		while(i <= m)
 		{
-			vector_aux[i] = vector[k];
+			v_aux.at(k)=v_orig.at(i);
 			i++;
+			k++;
 		}
 	}
-	
-	// Copiamos el vector C en A.
-	for(k = izquierda; k <= derecha; k++)
-	vector[k] = vector_aux[k];
 
-}
-
-
-int main()
-{
-
-	int num = sizeof(vector) / sizeof(int);
-	
-	MezclaOrd(0, num - 1);
-	
-	for(int i=0; i < num; i++)
-	cout << vector[i] << " ";
-	
-	cout << endl;
-
+	for (aux = izquierda; aux <= derecha; aux++)
+	{
+		v_orig.at(aux)=v_aux.at(aux);
+	}
 }

@@ -88,6 +88,8 @@ int funcionAux (unsigned n)
 		vec_orig[i].initNAssign();
 	}
 
+	vec_aux = vec_orig;
+
 	MezclaOrd (vec_orig, vec_aux, 0, n-1);
 
 	a = VElement::getNAssign ();

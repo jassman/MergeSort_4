@@ -53,20 +53,20 @@ void evaluar (unsigned ini, unsigned fin, int inc, int (*f) (unsigned),ostream &
 
 float calculoCosteAux (unsigned n)
 {
-	vector <VElement> v (n); 
-	vector <VElement> c (n);
+	vector <VElement> vec_orig (n); 
+	vector <VElement> vec_aux (n);
 
 	struct timespec ini_time, fin_time;
 	float time;
 
 	for (unsigned i = 0; i < n; i++)
 	{
-    		v.push_back(1 + rand()%200);
+    		vec_orig.push_back(1 + rand()%200);
 	}
 
 	clock_gettime (CLOCK_PROCESS_CPUTIME_ID, &ini_time);
 
-	MezclaOrd (v, c, 0, n-1);
+	MezclaOrd (vec_orig, vec_aux, 0, n-1);
 
 	clock_gettime (CLOCK_PROCESS_CPUTIME_ID, &fin_time);
 	time = (fin_time.tv_sec - ini_time.tv_sec) + (fin_time.tv_nsec * 1.0e-9 - ini_time.tv_nsec * 1.0e-9);

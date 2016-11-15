@@ -12,20 +12,66 @@ void MezclaOrd (vector<VElement>& , vector<VElement>&, int , int );
 void Mezclar(vector<VElement> &, vector<VElement> &, int , int , int);
 void evaluar (unsigned ini, unsigned fin, int inc, int (*t)(unsigned),ostream &file);
 int funcionAux (unsigned);
+float calculoCosteAux(unsigned);
+void calculoCoste(unsigned ini, unsigned fin, int inc, float (*f)(unsigned), ostream & file);
     
 int main ()
 {
 	srand(time(NULL));
 
-	ofstream fichero, merge_r;
+	ofstream fichero, fichero_t;
 
-	int n = 10;
-	int i;
-
-	fichero.open ("ficheros.dat");
-	evaluar (50, 500,  50, funcionAux, fichero);
+	fichero.open("ficheros.dat");
+	evaluar (50, 5000,  50, funcionAux, fichero);
 	fichero.close();
+
+	fichero_t.open("fichero_t.dat");
+	calculoCoste(50, 5000,  50, calculoCosteAux, fichero_t);
+	fichero.close();
+
 	return 0;
+}
+
+void calculoCoste(unsigned ini, unsigned fin, int inc, float (*f)(unsigned), ostream & file)
+{
+ 	unsigned i;
+	for (i = ini;i <= fin; i = i + inc)
+	{
+		file << i << " " << f(i) << endl;
+	} 
+
+}
+
+void evaluar (unsigned ini, unsigned fin, int inc, int (*f) (unsigned),ostream &file)
+{
+	unsigned i;
+	for (i = ini;i <= fin; i = i + inc)
+	{
+		file << i << " " << f(i) << endl;
+	} 
+}
+
+float calculoCosteAux (unsigned n)
+{
+	vector <VElement> v (n); 
+	vector <VElement> c (n);
+
+	struct timespec ini_time, fin_time;
+	float time;
+
+	for (unsigned i = 0; i < n; i++)
+	{
+    		v.push_back(1 + rand()%200);
+	}
+
+	clock_gettime (CLOCK_PROCESS_CPUTIME_ID, &ini_time);
+
+	MezclaOrd (v, c, 0, n-1);
+
+	clock_gettime (CLOCK_PROCESS_CPUTIME_ID, &fin_time);
+	time = (fin_time.tv_sec - ini_time.tv_sec) + (fin_time.tv_nsec * 1.0e-9 - ini_time.tv_nsec * 1.0e-9);
+
+	return time;
 }
 
 int funcionAux (unsigned n)
@@ -112,13 +158,4 @@ void Mezclar(vector<VElement> &v_orig, vector<VElement> &v_aux, int izquierda, i
 	{
 		v_orig.at(aux)=v_aux.at(aux);
 	}
-}
-
-void evaluar (unsigned ini, unsigned fin, int inc, int (*f) (unsigned),ostream &file)
-{
-	unsigned i;
-	for (i = ini;i <= fin; i = i + inc)
-	{
-		file << i << " " << f(i) << endl;
-	} 
 }
